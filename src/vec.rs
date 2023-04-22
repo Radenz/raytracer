@@ -218,7 +218,7 @@ where
 
 #[macro_export]
 macro_rules! vec3 {
-    ($x:literal, $y:literal, $z:literal) => {
+    ($x:expr, $y:expr, $z:expr) => {
         Vector3::new($x, $y, $z)
     };
 }
