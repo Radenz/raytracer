@@ -40,3 +40,16 @@ pub fn ray_color(ray: &Ray) -> Color {
     t = 0.5 * (normalized_direction.y() + 1.);
     (1. - t) * Color::new(1, 1, 1) + t * Color::new(0.5, 0.7, 1)
 }
+
+pub trait Between<T> {
+    fn between(&self, lower_bound: &T, upper_bound: &T) -> bool;
+}
+
+impl<T> Between<T> for T
+where
+    T: PartialOrd,
+{
+    fn between(&self, lower_bound: &T, upper_bound: &T) -> bool {
+        lower_bound <= self && self < upper_bound
+    }
+}

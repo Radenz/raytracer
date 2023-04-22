@@ -30,3 +30,13 @@ impl Ray {
         self.origin + t * self.direction
     }
 }
+
+pub trait Hit {
+    fn hit(&self, ray: &Ray, range: (f64, f64)) -> Option<RayHit>;
+}
+
+pub struct RayHit {
+    pub point: Vector3,
+    pub normal: Vector3,
+    pub t: f64,
+}

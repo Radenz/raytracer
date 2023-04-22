@@ -25,6 +25,10 @@ impl Vector3 {
         lhs[0] * rhs[0] + lhs[1] * rhs[1] + lhs[2] * rhs[2]
     }
 
+    pub fn lerp(lhs: &Self, rhs: &Self, factor: f64) -> Self {
+        (1. - factor) * *lhs + factor * *rhs
+    }
+
     pub fn cross(lhs: &Self, rhs: &Self) -> Self {
         let mut values = [0.; 3];
 
