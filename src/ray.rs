@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::vec::Vector3;
 
 pub struct Ray {
@@ -39,4 +41,25 @@ pub struct RayHit {
     pub point: Vector3,
     pub normal: Vector3,
     pub t: f64,
+}
+
+pub struct HitTarget {
+    targets: Vec<Rc<dyn Hit>>,
+}
+
+impl Hit for HitTarget {
+    fn hit(&self, ray: &Ray, mut range: (f64, f64)) -> Option<RayHit> {
+        let mut ray_hit: Option<RayHit> = None;
+        let mut closest_hit_distance = range.1;
+
+        for object in self.targets.iter() {
+            range = (range.0, closest_hit_distance);
+            if let Some(local_hit) = object.hit(ray, range) {
+                closest_hit_distance = local_hit.t;
+                ray_hit = Some(local_hit);
+            }
+        }
+
+        ray_hit
+    }
 }
