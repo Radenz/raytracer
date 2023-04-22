@@ -4,11 +4,11 @@ use std::rc::Rc;
 
 use raytracer::{
     color::Color,
-    ray::{Hit, HitTarget, Ray},
-    sphere::Sphere,
+    geometry::sphere::Sphere,
     util::{print_color, ray_color},
     vec::Vector3,
     vec3,
+    view::ray::{Hit, HitTarget, Ray},
 };
 
 fn main() {

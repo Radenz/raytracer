@@ -1,7 +1,7 @@
 use crate::{
-    ray::{Hit, Ray, RayHit},
     util::Between,
     vec::Vector3,
+    view::ray::{Hit, Ray, RayHit},
 };
 
 pub struct Sphere {

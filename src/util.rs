@@ -4,8 +4,8 @@ pub mod random;
 
 use crate::{
     color::Color,
-    ray::{Hit, HitTarget, Ray},
     vec::Vector3,
+    view::ray::{Hit, HitTarget, Ray},
 };
 
 pub fn print_color(mut pixel_color: Color) {
