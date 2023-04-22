@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use std::rc::Rc;
 
 use raytracer::{

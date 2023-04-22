@@ -1,3 +1,7 @@
+#![allow(unused)]
+
+pub mod random;
+
 use crate::{
     color::Color,
     ray::{Hit, HitTarget, Ray},
