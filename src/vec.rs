@@ -66,6 +66,16 @@ impl Vector3 {
     pub fn normalize(&self) -> Self {
         *self / self.magnitude()
     }
+
+    pub fn clamp_each(&self, min: impl Into<f64>, max: impl Into<f64>) -> Self {
+        let min = min.into();
+        let max = max.into();
+        let mut vector = *self;
+        for i in 0..3 {
+            vector[i] = vector[i].clamp(min, max);
+        }
+        vector
+    }
 }
 
 impl Display for Vector3 {

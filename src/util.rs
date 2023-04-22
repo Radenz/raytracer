@@ -18,6 +18,18 @@ pub fn print_color(mut pixel_color: Color) {
     );
 }
 
+pub fn print_sampled_color(mut pixel_color: Color, samples: i32) {
+    pixel_color /= samples;
+    pixel_color = pixel_color.clamp_each(0, 0.999);
+    pixel_color *= 256;
+    println!(
+        "{} {} {}",
+        pixel_color.x() as u8,
+        pixel_color.y() as u8,
+        pixel_color.z() as u8
+    );
+}
+
 fn hit_sphere(center: Vector3, radius: f64, ray: &Ray) -> f64 {
     let origin_distance = *ray.origin() - center;
     let a = ray.direction().magnitude_squared();

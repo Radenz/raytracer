@@ -5,14 +5,52 @@ use std::rc::Rc;
 use raytracer::{
     color::Color,
     geometry::sphere::Sphere,
-    util::{print_color, ray_color},
+    util::{print_color, print_sampled_color, random::Random, ray_color},
     vec::Vector3,
     vec3,
-    view::ray::{Hit, HitTarget, Ray},
+    view::{
+        camera::Camera,
+        ray::{Hit, HitTarget, Ray},
+    },
 };
 
 fn main() {
-    world();
+    sampled();
+}
+
+fn sampled() {
+    let aspect_ratio = 16. / 9.;
+    let image_width = 400;
+    let image_height = (image_width as f64 / aspect_ratio) as i32;
+    let samples = 100;
+
+    let mut world = HitTarget::new();
+    (*world).push(Rc::new(Sphere::new(vec3![0, 0, -1], 0.5)));
+    (*world).push(Rc::new(Sphere::new(vec3![0, -100.5, -1], 100.)));
+
+    let camera = Camera::new();
+
+    println!("P3");
+    println!("{} {}", image_width, image_height);
+    println!("255");
+
+    for j in (0..image_height).rev() {
+        eprintln!("Scanlines remaining: {}", j);
+
+        for i in 0..image_width {
+            let mut color_sum = Color::zero();
+
+            for _ in 0..samples {
+                let u = (i as f64 + Random::f64()) / (image_width - 1) as f64;
+                let v = (j as f64 + Random::f64()) / (image_height - 1) as f64;
+
+                let ray = camera.get_ray(u, v);
+                color_sum += ray_color(&ray, &world);
+            }
+
+            print_sampled_color(color_sum, samples);
+        }
+    }
 }
 
 fn world() {
