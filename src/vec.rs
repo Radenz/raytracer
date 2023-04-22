@@ -21,6 +21,10 @@ impl Vector3 {
         Self::new(0, 0, 0)
     }
 
+    pub fn ones() -> Self {
+        Self::new(1, 1, 1)
+    }
+
     pub fn dot(lhs: &Self, rhs: &Self) -> f64 {
         lhs[0] * rhs[0] + lhs[1] * rhs[1] + lhs[2] * rhs[2]
     }
@@ -210,4 +214,11 @@ where
         self /= rhs;
         self
     }
+}
+
+#[macro_export]
+macro_rules! vec3 {
+    ($x:literal, $y:literal, $z:literal) => {
+        Vector3::new($x, $y, $z)
+    };
 }

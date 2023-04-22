@@ -1,4 +1,7 @@
-use std::rc::Rc;
+use std::{
+    ops::{Deref, DerefMut},
+    rc::Rc,
+};
 
 use crate::vec::Vector3;
 
@@ -47,6 +50,12 @@ pub struct HitTarget {
     targets: Vec<Rc<dyn Hit>>,
 }
 
+impl HitTarget {
+    pub fn new() -> Self {
+        Self { targets: vec![] }
+    }
+}
+
 impl Hit for HitTarget {
     fn hit(&self, ray: &Ray, mut range: (f64, f64)) -> Option<RayHit> {
         let mut ray_hit: Option<RayHit> = None;
@@ -61,5 +70,19 @@ impl Hit for HitTarget {
         }
 
         ray_hit
+    }
+}
+
+impl Deref for HitTarget {
+    type Target = Vec<Rc<dyn Hit>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.targets
+    }
+}
+
+impl DerefMut for HitTarget {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.targets
     }
 }

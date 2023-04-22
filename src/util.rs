@@ -1,4 +1,8 @@
-use crate::{color::Color, ray::Ray, vec::Vector3};
+use crate::{
+    color::Color,
+    ray::{Hit, HitTarget, Ray},
+    vec::Vector3,
+};
 
 pub fn print_color(mut pixel_color: Color) {
     pixel_color *= 255.999;
@@ -24,21 +28,13 @@ fn hit_sphere(center: Vector3, radius: f64, ray: &Ray) -> f64 {
     }
 }
 
-pub fn ray_color(ray: &Ray) -> Color {
-    let center = Vector3::new(0, 0, -1);
-    let mut t = hit_sphere(center, 0.5, ray);
-
-    if t > 0. {
-        let hitpoint = ray.at(t);
-        // Range -1 to 1 for each component
-        let normal = (hitpoint - center).normalize();
-        let ones = Vector3::new(1, 1, 1);
-        return 0.5 * (normal + ones);
+pub fn ray_color(ray: &Ray, world: &HitTarget) -> Color {
+    if let Some(hit) = world.hit(&ray, (0., f64::INFINITY)) {
+        return 0.5 * (hit.normal + Color::ones());
     }
-
     let normalized_direction = ray.direction().normalize();
-    t = 0.5 * (normalized_direction.y() + 1.);
-    (1. - t) * Color::new(1, 1, 1) + t * Color::new(0.5, 0.7, 1)
+    let t = 0.5 * (normalized_direction.y() + 1.);
+    (1. - t) * Color::ones() + t * Color::new(0.5, 0.7, 1)
 }
 
 pub trait Between<T> {
