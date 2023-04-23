@@ -55,6 +55,10 @@ impl Vector3 {
         self[2]
     }
 
+    pub fn to_array(&self) -> [f64; 3] {
+        [self.x(), self.y(), self.z()]
+    }
+
     pub fn magnitude(&self) -> f64 {
         self.magnitude_squared().sqrt()
     }

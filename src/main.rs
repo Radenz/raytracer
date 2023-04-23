@@ -1,10 +1,15 @@
 #![allow(unused)]
 
-use std::rc::Rc;
+use std::{
+    rc::Rc,
+    time::{Duration, Instant},
+};
 
+use image::{save_buffer, ImageBuffer, Rgb};
 use raytracer::{
     color::Color,
     geometry::sphere::Sphere,
+    render::pixel::Vector3Extension,
     util::{print_color, print_sampled_color, random::Random, ray_color},
     vec::Vector3,
     vec3,
@@ -21,7 +26,7 @@ fn main() {
 fn sampled() {
     let aspect_ratio = 16. / 9.;
     let image_width = 400;
-    let image_height = (image_width as f64 / aspect_ratio) as i32;
+    let image_height = (image_width as f64 / aspect_ratio) as u32;
     let samples = 100;
 
     let mut world = HitTarget::new();
@@ -30,27 +35,29 @@ fn sampled() {
 
     let camera = Camera::new();
 
-    println!("P3");
-    println!("{} {}", image_width, image_height);
-    println!("255");
+    let start = Instant::now();
 
-    for j in (0..image_height).rev() {
-        eprintln!("Scanlines remaining: {}", j);
+    let buffer = ImageBuffer::from_fn(image_width, image_height, |i, j| {
+        let mut color_sum = Color::zero();
 
-        for i in 0..image_width {
-            let mut color_sum = Color::zero();
+        for _ in 0..samples {
+            let u = (i as f64 + Random::f64()) / (image_width - 1) as f64;
+            let v = ((image_height - 1 - j) as f64 + Random::f64()) / (image_height - 1) as f64;
 
-            for _ in 0..samples {
-                let u = (i as f64 + Random::f64()) / (image_width - 1) as f64;
-                let v = (j as f64 + Random::f64()) / (image_height - 1) as f64;
-
-                let ray = camera.get_ray(u, v);
-                color_sum += ray_color(&ray, &world);
-            }
-
-            print_sampled_color(color_sum, samples);
+            let ray = camera.get_ray(u, v);
+            color_sum += ray_color(&ray, &world);
         }
-    }
+
+        let mut sampled_color = color_sum / samples;
+
+        Rgb(sampled_color.to_u8_range().into())
+    });
+
+    let end = Instant::now();
+
+    buffer.save("world.png");
+    let duration = end - start;
+    println!("Rendered in {} ms", duration.as_millis());
 }
 
 fn world() {
