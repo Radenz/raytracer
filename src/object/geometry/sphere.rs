@@ -1,4 +1,7 @@
+use std::sync::Arc;
+
 use crate::{
+    object::material::Material,
     util::Between,
     view::ray::{Hit, Ray, RayHit},
 };
@@ -8,22 +11,27 @@ use super::vector::Vector3;
 pub struct Sphere {
     center: Vector3,
     radius: f64,
+    material: Arc<dyn Material>,
 }
 
 impl Sphere {
-    pub fn new(center: Vector3, radius: f64) -> Self {
-        Self { center, radius }
-    }
-}
-
-impl Default for Sphere {
-    fn default() -> Self {
+    pub fn new(center: Vector3, radius: f64, material: Arc<dyn Material>) -> Self {
         Self {
-            center: Vector3::default(),
-            radius: 1.,
+            center,
+            radius,
+            material,
         }
     }
 }
+
+// impl Default for Sphere {
+//     fn default() -> Self {
+//         Self {
+//             center: Vector3::default(),
+//             radius: 1.,
+//         }
+//     }
+// }
 
 impl Hit for Sphere {
     fn hit(&self, ray: &Ray, range: (f64, f64)) -> Option<RayHit> {
@@ -49,6 +57,7 @@ impl Hit for Sphere {
             normal,
             front_face: false,
             t: root,
+            material: self.material.clone(),
         };
         hit.set_face_normal(ray, normal);
         Some(hit)

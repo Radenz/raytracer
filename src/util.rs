@@ -58,13 +58,10 @@ pub fn ray_color_diffuse(ray: &Ray, world: &HitTarget, depth: u32) -> Color {
     }
 
     if let Some(hit) = world.hit(&ray, (0.001, f64::INFINITY)) {
-        let diffuse_target = hit.point + hit.normal + Vector3::random_unit();
-        return 0.5
-            * ray_color_diffuse(
-                &Ray::of(hit.point, diffuse_target - hit.point),
-                world,
-                depth - 1,
-            );
+        if let Some(scatter) = hit.material.scatter(&ray, &hit) {
+            return scatter.attenuation * ray_color_diffuse(&scatter.ray, &world, depth - 1);
+        }
+        return Color::black();
     }
     let normalized_direction = ray.direction().normalize();
     let t = 0.5 * (normalized_direction.y() + 1.);

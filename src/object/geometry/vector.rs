@@ -118,6 +118,11 @@ impl Vector3 {
         *self / self.magnitude()
     }
 
+    pub fn is_near_zero(&self) -> bool {
+        let epsilon = 1e-8;
+        self[0].abs() < epsilon && self[1].abs() < epsilon && self[2].abs() < epsilon
+    }
+
     pub fn clamp_each(&self, min: impl Into<f64>, max: impl Into<f64>) -> Self {
         let min = min.into();
         let max = max.into();
