@@ -1,5 +1,6 @@
 use crate::{
     object::{geometry::vector::Vector3, material::color::Color},
+    util::random::Random,
     view::ray::{Ray, RayHit},
 };
 
@@ -13,6 +14,12 @@ pub struct Dielectric {
 impl Dielectric {
     pub fn new(index: f64) -> Self {
         Self { index }
+    }
+
+    fn reflectance(&self, cosine: f64, refraction_index: f64) -> f64 {
+        let mut r0 = (1. - refraction_index) / (1. + refraction_index);
+        r0 = r0 * r0;
+        r0 + (1. - r0) * (1. - cosine).powi(5)
     }
 }
 
@@ -28,11 +35,12 @@ impl Material for Dielectric {
         let cos_theta = f64::min(Vector3::dot(&-normalized_ray_direction, &hit.normal), 1.);
         let sin_theta = (1. - cos_theta).sqrt();
         let cannot_refract = refraction_ratio * sin_theta > 1.;
-        let scattered_direction = if cannot_refract {
-            normalized_ray_direction.reflect(&hit.normal)
-        } else {
-            normalized_ray_direction.refract(&hit.normal, refraction_ratio)
-        };
+        let scattered_direction =
+            if cannot_refract || self.reflectance(cos_theta, refraction_ratio) > Random::f64() {
+                normalized_ray_direction.reflect(&hit.normal)
+            } else {
+                normalized_ray_direction.refract(&hit.normal, refraction_ratio)
+            };
 
         Some(Scatter {
             attenuation,
