@@ -1,6 +1,6 @@
 use std::{
     ops::{Deref, DerefMut},
-    rc::Rc,
+    sync::Arc,
 };
 
 use crate::vec::Vector3;
@@ -36,7 +36,7 @@ impl Ray {
     }
 }
 
-pub trait Hit {
+pub trait Hit: Sync + Send {
     fn hit(&self, ray: &Ray, range: (f64, f64)) -> Option<RayHit>;
 }
 
@@ -47,7 +47,7 @@ pub struct RayHit {
 }
 
 pub struct HitTarget {
-    targets: Vec<Rc<dyn Hit>>,
+    targets: Vec<Arc<dyn Hit>>,
 }
 
 impl HitTarget {
@@ -74,7 +74,7 @@ impl Hit for HitTarget {
 }
 
 impl Deref for HitTarget {
-    type Target = Vec<Rc<dyn Hit>>;
+    type Target = Vec<Arc<dyn Hit>>;
 
     fn deref(&self) -> &Self::Target {
         &self.targets

@@ -1,7 +1,10 @@
 use std::{
     fmt::Display,
+    iter::Sum,
     ops::{Add, AddAssign, Deref, DerefMut, Div, DivAssign, Mul, MulAssign, Neg, Sub},
 };
+
+use crate::util::random::Random;
 
 type Values = [f64; 3];
 
@@ -43,6 +46,37 @@ impl Vector3 {
         Self { values }
     }
 
+    pub fn random() -> Self {
+        Self::new(Random::f64(), Random::f64(), Random::f64())
+    }
+
+    pub fn random_between(min: f64, max: f64) -> Self {
+        Self::new(
+            Random::f64_between(min, max),
+            Random::f64_between(min, max),
+            Random::f64_between(min, max),
+        )
+    }
+
+    pub fn random_inclusive_between(min: f64, max: f64) -> Self {
+        Self::new(
+            Random::f64_inclusive_between(min, max),
+            Random::f64_inclusive_between(min, max),
+            Random::f64_inclusive_between(min, max),
+        )
+    }
+
+    pub fn random_in_unit_sphere() -> Self {
+        loop {
+            let vector = Self::random_inclusive_between(-1., 1.);
+            if vector.magnitude_squared() >= 1. {
+                continue;
+            };
+
+            return vector;
+        }
+    }
+
     pub fn x(&self) -> f64 {
         self[0]
     }
@@ -79,6 +113,20 @@ impl Vector3 {
             vector[i] = vector[i].clamp(min, max);
         }
         vector
+    }
+
+    pub fn sqrt(&self) -> Self {
+        Self {
+            values: [self.x().sqrt(), self.y().sqrt(), self.z().sqrt()],
+        }
+    }
+}
+
+unsafe impl Send for Vector3 {}
+
+impl Sum for Vector3 {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+        iter.fold(Vector3::zero(), |sum, el| sum + el)
     }
 }
 

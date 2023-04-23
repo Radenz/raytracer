@@ -1,4 +1,4 @@
-use rand::random;
+use rand::{distributions::Uniform, prelude::Distribution, random};
 
 pub struct Random;
 
@@ -9,5 +9,11 @@ impl Random {
 
     pub fn f64_between(min: f64, max: f64) -> f64 {
         min + Self::f64() * (max - min)
+    }
+
+    pub fn f64_inclusive_between(min: f64, max: f64) -> f64 {
+        let range = Uniform::from(0.0..=1.);
+        let mut rng = rand::thread_rng();
+        range.sample(&mut rng)
     }
 }
