@@ -14,20 +14,28 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn new(vfov: f64, aspect_ratio: f64) -> Self {
+    pub fn new(
+        position: Vector3,
+        at: Vector3,
+        mut up: Vector3,
+        vfov: f64,
+        aspect_ratio: f64,
+    ) -> Self {
         let theta = vfov.to_radians();
         let half_height = (theta / 2.).tan();
         let viewport_height = 2. * half_height;
         let viewport_width = aspect_ratio * viewport_height;
-        let focal_length = 1.;
 
-        let origin = Vector3::zero();
-        let horizontal = vec3![viewport_width, 0, 0];
-        let vertical = vec3![0, viewport_height, 0];
-        let lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3![0, 0, focal_length];
+        let front = (position - at).normalize();
+        let right = Vector3::cross(&up, &front).normalize();
+        up = Vector3::cross(&front, &right);
+
+        let horizontal = viewport_width * right;
+        let vertical = viewport_height * up;
+        let lower_left_corner = position - (horizontal / 2) - (vertical / 2) - front;
 
         Self {
-            origin,
+            origin: position,
             lower_left_corner,
             horizontal,
             vertical,
@@ -40,7 +48,7 @@ impl Camera {
 
         Ray::of(
             self.origin,
-            self.lower_left_corner + u * self.horizontal + v * self.vertical,
+            self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin,
         )
     }
 }
