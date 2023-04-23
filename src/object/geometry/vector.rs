@@ -138,6 +138,10 @@ impl Vector3 {
             values: [self.x().sqrt(), self.y().sqrt(), self.z().sqrt()],
         }
     }
+
+    pub fn reflect(&self, normal: &Self) -> Self {
+        *self - 2. * Self::dot(self, normal) * *normal
+    }
 }
 
 unsafe impl Send for Vector3 {}
