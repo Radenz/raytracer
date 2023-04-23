@@ -3,8 +3,7 @@
 pub mod random;
 
 use crate::{
-    color::Color,
-    vec::Vector3,
+    object::{geometry::vector::Vector3, material::color::Color},
     view::ray::{Hit, HitTarget, Ray},
 };
 

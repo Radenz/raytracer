@@ -1,9 +1,17 @@
+#![allow(unused)]
+
 use raytracer::{
-    color::Color,
-    geometry::sphere::Sphere,
-    util::print_color,
-    vec::Vector3,
-    view::ray::{Hit, Ray},
+    object::{
+        geometry::{sphere::Sphere, vector::Vector3},
+        material::color::Color,
+    },
+    render::pixel::Vector3Extension,
+    util::{print_color, random::Random, ray_color},
+    vec3,
+    view::{
+        camera::Camera,
+        ray::{Hit, HitTarget, Ray},
+    },
 };
 
 fn main() {

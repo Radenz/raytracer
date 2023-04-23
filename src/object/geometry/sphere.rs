@@ -1,8 +1,9 @@
 use crate::{
     util::Between,
-    vec::Vector3,
     view::ray::{Hit, Ray, RayHit},
 };
+
+use super::vector::Vector3;
 
 pub struct Sphere {
     center: Vector3,

@@ -1,4 +1,4 @@
-use crate::vec::Vector3;
+use crate::object::geometry::vector::Vector3;
 
 impl Into<[u8; 3]> for Vector3 {
     fn into(self) -> [u8; 3] {

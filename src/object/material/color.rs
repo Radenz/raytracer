@@ -1,4 +1,4 @@
-use crate::vec::Vector3;
+use crate::object::geometry::vector::Vector3;
 
 pub type Color = Vector3;
 

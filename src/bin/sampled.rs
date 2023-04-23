@@ -2,15 +2,15 @@ use std::{sync::Arc, time::Instant};
 
 use image::{ImageBuffer, Rgb};
 use raytracer::{
-    color::Color,
-    geometry::sphere::Sphere,
+    object::{
+        geometry::{sphere::Sphere, vector::Vector3},
+        material::color::Color,
+    },
     render::pixel::Vector3Extension,
     util::{random::Random, ray_color},
-    vec::Vector3,
     vec3,
     view::{camera::Camera, ray::HitTarget},
 };
-
 fn main() {
     let aspect_ratio = 16. / 9.;
     let image_width = 400;

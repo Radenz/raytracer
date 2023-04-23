@@ -9,16 +9,14 @@ use std::{
 use image::{save_buffer, ImageBuffer, Rgb};
 use rayon::prelude::*;
 use raytracer::{
-    color::Color,
-    geometry::sphere::Sphere,
-    render::pixel::Vector3Extension,
-    util::{print_color, print_sampled_color, random::Random, ray_color, ray_color_diffuse},
-    vec::Vector3,
-    vec3,
-    view::{
-        camera::{self, Camera},
-        ray::{Hit, HitTarget, Ray},
+    object::{
+        geometry::{sphere::Sphere, vector::Vector3},
+        material::color::Color,
     },
+    render::pixel::Vector3Extension,
+    util::{random::Random, ray_color, ray_color_diffuse},
+    vec3,
+    view::{camera::Camera, ray::HitTarget},
 };
 
 // ? This lambertian surface approximation use normal displacement for diffuse target

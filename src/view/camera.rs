@@ -1,4 +1,4 @@
-use crate::{vec::Vector3, vec3};
+use crate::{object::geometry::vector::Vector3, vec3};
 
 use super::ray::Ray;
 

@@ -9,17 +9,15 @@ use std::{
 use image::{save_buffer, ImageBuffer, Rgb};
 use rayon::prelude::*;
 use raytracer::{
-    color::Color,
-    geometry::sphere::Sphere,
-    render::pixel::Vector3Extension,
-    util::{
-        print_color, print_sampled_color, random::Random, ray_color, ray_color_diffuse,
-        ray_color_diffuse_hemisphere,
+    object::{
+        geometry::{sphere::Sphere, vector::Vector3},
+        material::color::Color,
     },
-    vec::Vector3,
+    render::pixel::Vector3Extension,
+    util::{random::Random, ray_color_diffuse_hemisphere},
     vec3,
     view::{
-        camera::{self, Camera},
+        camera::Camera,
         ray::{Hit, HitTarget, Ray},
     },
 };

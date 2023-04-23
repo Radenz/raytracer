@@ -3,7 +3,7 @@ use std::{
     sync::Arc,
 };
 
-use crate::vec::Vector3;
+use crate::object::geometry::vector::Vector3;
 
 pub struct Ray {
     origin: Vector3,

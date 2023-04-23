@@ -1,11 +1,19 @@
+#![allow(unused)]
+
 use std::sync::Arc;
 
 use raytracer::{
-    geometry::sphere::Sphere,
-    util::{print_color, ray_color},
-    vec::Vector3,
+    object::{
+        geometry::{sphere::Sphere, vector::Vector3},
+        material::color::Color,
+    },
+    render::pixel::Vector3Extension,
+    util::{print_color, random::Random, ray_color},
     vec3,
-    view::ray::{HitTarget, Ray},
+    view::{
+        camera::Camera,
+        ray::{HitTarget, Ray},
+    },
 };
 
 fn main() {
