@@ -44,10 +44,13 @@ impl Hit for Sphere {
 
         let hitpoint = ray.at(root);
         let normal = (hitpoint - self.center) / self.radius;
-        Some(RayHit {
+        let mut hit = RayHit {
             point: hitpoint,
             normal,
+            front_face: false,
             t: root,
-        })
+        };
+        hit.set_face_normal(ray, normal);
+        Some(hit)
     }
 }

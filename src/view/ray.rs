@@ -44,6 +44,18 @@ pub struct RayHit {
     pub point: Vector3,
     pub normal: Vector3,
     pub t: f64,
+    pub front_face: bool,
+}
+
+impl RayHit {
+    pub fn set_face_normal(&mut self, ray: &Ray, outward_normal: Vector3) {
+        self.front_face = Vector3::dot(&ray.direction, &outward_normal) < 0.;
+        self.normal = if self.front_face {
+            outward_normal
+        } else {
+            -outward_normal
+        }
+    }
 }
 
 pub struct HitTarget {
