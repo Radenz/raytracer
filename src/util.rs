@@ -58,7 +58,7 @@ pub fn ray_color_diffuse(ray: &Ray, world: &HitTarget, depth: u32) -> Color {
         return Color::black();
     }
 
-    if let Some(hit) = world.hit(&ray, (0., f64::INFINITY)) {
+    if let Some(hit) = world.hit(&ray, (0.001, f64::INFINITY)) {
         let diffuse_target = hit.point + hit.normal + Vector3::random_in_unit_sphere();
         return 0.5
             * ray_color_diffuse(

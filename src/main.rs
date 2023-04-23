@@ -62,7 +62,7 @@ fn gamma_corrected() {
 
     let end = Instant::now();
 
-    buffer.save("gamma-corrected.png");
+    buffer.save("gamma-corrected-shadow-acne-fixed.png");
     let duration = end - start;
     println!("Rendered in {} ms", duration.as_millis());
 }
