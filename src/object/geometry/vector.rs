@@ -142,6 +142,15 @@ impl Vector3 {
     pub fn reflect(&self, normal: &Self) -> Self {
         *self - 2. * Self::dot(self, normal) * *normal
     }
+
+    pub fn refract(&self, normal: &Self, eta_ratio: f64) -> Self {
+        let cos_theta = f64::min(Vector3::dot(&-*self, normal), 1.);
+        let refraction_perpendicular = eta_ratio * (*self + cos_theta * *normal);
+        let refraction_parallel =
+            -(f64::abs(1. - refraction_perpendicular.magnitude_squared())).sqrt() * *normal;
+
+        refraction_perpendicular + refraction_parallel
+    }
 }
 
 unsafe impl Send for Vector3 {}

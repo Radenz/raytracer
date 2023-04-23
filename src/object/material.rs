@@ -3,6 +3,7 @@ use crate::view::ray::{Ray, RayHit};
 use self::color::Color;
 
 pub mod color;
+pub mod dielectric;
 pub mod lambertian;
 pub mod metal;
 
