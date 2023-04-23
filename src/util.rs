@@ -59,7 +59,7 @@ pub fn ray_color_diffuse(ray: &Ray, world: &HitTarget, depth: u32) -> Color {
     }
 
     if let Some(hit) = world.hit(&ray, (0.001, f64::INFINITY)) {
-        let diffuse_target = hit.point + hit.normal + Vector3::random_in_unit_sphere();
+        let diffuse_target = hit.point + hit.normal + Vector3::random_unit();
         return 0.5
             * ray_color_diffuse(
                 &Ray::of(hit.point, diffuse_target - hit.point),
@@ -69,8 +69,26 @@ pub fn ray_color_diffuse(ray: &Ray, world: &HitTarget, depth: u32) -> Color {
     }
     let normalized_direction = ray.direction().normalize();
     let t = 0.5 * (normalized_direction.y() + 1.);
-    (1. - t) * Color::ones() + t * Color::new(0.5, 0.7, 1)
-    // Vector3::lerp(&Color::ones(), &Color::new(0.5, 0.7, 1), t)
+    Vector3::lerp(&Color::ones(), &Color::new(0.5, 0.7, 1), t)
+}
+
+pub fn ray_color_diffuse_hemisphere(ray: &Ray, world: &HitTarget, depth: u32) -> Color {
+    if depth == 0 {
+        return Color::black();
+    }
+
+    if let Some(hit) = world.hit(&ray, (0.001, f64::INFINITY)) {
+        let diffuse_target = hit.point + hit.normal + Vector3::random_in_hemisphere(hit.normal);
+        return 0.5
+            * ray_color_diffuse(
+                &Ray::of(hit.point, diffuse_target - hit.point),
+                world,
+                depth - 1,
+            );
+    }
+    let normalized_direction = ray.direction().normalize();
+    let t = 0.5 * (normalized_direction.y() + 1.);
+    Vector3::lerp(&Color::ones(), &Color::new(0.5, 0.7, 1), t)
 }
 
 pub trait Between<T> {

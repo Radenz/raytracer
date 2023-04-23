@@ -77,6 +77,19 @@ impl Vector3 {
         }
     }
 
+    pub fn random_unit() -> Self {
+        Self::random_in_unit_sphere().normalize()
+    }
+
+    pub fn random_in_hemisphere(normal: Self) -> Self {
+        let random_in_unit_sphere = Self::random_in_unit_sphere();
+        if Self::dot(&random_in_unit_sphere, &normal) > 0. {
+            random_in_unit_sphere
+        } else {
+            -random_in_unit_sphere
+        }
+    }
+
     pub fn x(&self) -> f64 {
         self[0]
     }
