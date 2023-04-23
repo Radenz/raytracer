@@ -12,7 +12,7 @@ impl Random {
     }
 
     pub fn f64_inclusive_between(min: f64, max: f64) -> f64 {
-        let range = Uniform::from(0.0..=1.);
+        let range = Uniform::from(min..=max);
         let mut rng = rand::thread_rng();
         range.sample(&mut rng)
     }
