@@ -1,5 +1,5 @@
 use crate::{
-    object::material::color::Color,
+    object::{geometry::vector::Vector3, material::color::Color},
     view::ray::{Ray, RayHit},
 };
 
@@ -25,11 +25,18 @@ impl Material for Dielectric {
             self.index
         };
         let normalized_ray_direction = ray.direction().normalize();
-        let refraction = normalized_ray_direction.refract(&hit.normal, refraction_ratio);
+        let cos_theta = f64::min(Vector3::dot(&-normalized_ray_direction, &hit.normal), 1.);
+        let sin_theta = (1. - cos_theta).sqrt();
+        let cannot_refract = refraction_ratio * sin_theta > 1.;
+        let scattered_direction = if cannot_refract {
+            normalized_ray_direction.reflect(&hit.normal)
+        } else {
+            normalized_ray_direction.refract(&hit.normal, refraction_ratio)
+        };
 
         Some(Scatter {
             attenuation,
-            ray: Ray::of(hit.point, refraction),
+            ray: Ray::of(hit.point, scattered_direction),
         })
     }
 }
