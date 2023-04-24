@@ -77,6 +77,18 @@ impl Vector3 {
         }
     }
 
+    pub fn random_in_unit_disk() -> Self {
+        loop {
+            let mut vector = Self::random_inclusive_between(-1., 1.);
+            vector[2] = 0.;
+            if vector.magnitude_squared() >= 1. {
+                continue;
+            };
+
+            return vector;
+        }
+    }
+
     pub fn random_unit() -> Self {
         Self::random_in_unit_sphere().normalize()
     }
@@ -87,6 +99,12 @@ impl Vector3 {
             random_in_unit_sphere
         } else {
             -random_in_unit_sphere
+        }
+    }
+
+    pub fn up() -> Self {
+        Self {
+            values: [0., 1., 0.],
         }
     }
 
