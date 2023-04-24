@@ -12,7 +12,7 @@ pub struct Camera {
     // Vertical displacement
     vertical: Vector3,
     // View vectors
-    front: Vector3,
+    // front: Vector3,
     right: Vector3,
     up: Vector3,
     lens_radius: f64,
@@ -48,7 +48,7 @@ impl Camera {
             lower_left_corner,
             horizontal,
             vertical,
-            front,
+            // front,
             right,
             up,
             lens_radius,
